@@ -50,11 +50,10 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             console.log(data.events);
         })
 
-        $scope.chosenPeriod = null;
     })
 
     .controller('InfoCtrl', function($scope) {
-        console.log('INFO');
+
         $scope.leftButtons = [{
             type: 'button-icon icon ion-search',
             tap: function(e) {
@@ -93,9 +92,8 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
         })
 
         $scope.chooseCat = function(chosenPeriod) {
-            $location.path('event/home');
 
-            $scope.chosenPeriod = chosenPeriod;
+            $location.path('event/home') + $location.search('period', chosenPeriod);
 
         }
 
@@ -116,8 +114,9 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             }
         }];
 
-        function initialize() {
-            $http.get('https://hacklancaster.herokuapp.com/catogories/' + $scope.chosenPeriod).success(function(geo) {
+        $scope.initializeMap =  function() {
+
+            $http.get('https://hacklancaster.herokuapp.com/catogories/' + $location.search().period).success(function(geo) {
                 var map = L.mapbox.map('map', {
                     "attribution": "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
                     "autoscale": true,
@@ -148,6 +147,8 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                     ],
                     "webpage": "https://a.tiles.mapbox.com/v4/examples.a4c252ab/page.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
                 }).setView([54.0498942, -2.8055977], 15)
+                
+                console.log(geo);
 
                 var featureLayer = L.mapbox.featureLayer(geo)
                     .addTo(map);
@@ -175,12 +176,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             //$scope.centerOnMe();
             HSSearch.init();
         }
-			
-		L.DomEvent.addListener(window, 'load', initialize);
-
-        
-        $rootScope.$on('$locationChangeSuccess', initialize);
-        
+		
         
         $scope.centerOnMe = function() {
             if(!$scope.map) {
