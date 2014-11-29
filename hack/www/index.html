@@ -140,7 +140,7 @@
     <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
         <content has-header="true" has-footer="false" scroll="true">
             
-            <div class="card" ng-repeat="period in periods">
+            <div class="card" ng-repeat="period in periods" ng-if="period.BroadPeriod == period.Period">
               <div class="item item-text-wrap">
                 {{period.Legend}}
               </div>
