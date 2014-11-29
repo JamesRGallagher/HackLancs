@@ -50,6 +50,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             console.log(data.events);
         })
 
+        $scope.chosenPeriod = null;
     })
 
     .controller('InfoCtrl', function($scope) {
@@ -68,9 +69,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
         }];
     })
 
-    .controller('StartCtrl', function($scope, $http) {
-        console.log('INFO');
-        
+    .controller('StartCtrl', function($scope, $http, $location) {
         $scope.leftButtons = [{
             type: 'button-icon icon ion-search',
             tap: function(e) {
@@ -91,6 +90,13 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
 
             console.log(data);
         })
+
+        $scope.chooseCat = function(chosenPeriod) {
+            $location.path('event/home');
+
+            $scope.chosenPeriod = chosenPeriod;
+
+        }
 
     })
 
@@ -151,13 +157,8 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
 
             //$scope.centerOnMe();
             HSSearch.init();
-
-
         }
-        L.DomEvent.addListener(window, 'load', initialize);
-
         
-        $rootScope.$on('$locationChangeSuccess',initialize);
         
         $scope.centerOnMe = function() {
             if(!$scope.map) {
