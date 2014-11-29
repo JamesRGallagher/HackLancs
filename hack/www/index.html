@@ -48,12 +48,7 @@
             background-color: #222;
             border: none;
         }
-        #content {
-            top: 44px;
-            padding-top: 45px;
-            padding-bottom: 20px;
-            background-color: #222;
-        }
+
         .scroll {
             background-color: #222;
         }
@@ -106,8 +101,10 @@
                 <div class="title">Right Menu</div>
             </header>
             <content has-header="true">
-                <ul class="list" ng-repeat="place in Places">
-                    <a href="#/event/info" class="item">place.Event_Start_Date</a>
+                <ul class="list">
+                    <li  ng-repeat="event in events">
+                        <a href="#/event/info" data-click-menulink class="item item-icon-left"><i class="icon ion-ios7-ionic-outline"></i>{{ event.Site_Name}}</a>
+                    </li>
                 </ul>
             </content>
         </side-menu>

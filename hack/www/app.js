@@ -29,19 +29,17 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                     }
                 }
             })
-
-
-
-
-
         $urlRouterProvider.otherwise("/event/home");
     })
 
     .controller('MainCtrl', function($scope,$http) {
       var responsePromise = $http.get("https://hacklancaster.herokuapp.com/events")
           .success(function(data, status, headers, config) {
-            $scope.places = data.Places;
+             console.log(data.events)
+            $scope.events = data.events;
         })
+
+
 
 
         console.log(responsePromise);
@@ -78,48 +76,54 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
         }];
 
         function initialize() {
-            var map = L.mapbox.map('map', {
-                "attribution": "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
-                "autoscale": true,
-                "bounds": [
-                    -180,
-                    -85.0511,
-                    180,
-                    85.0511
-                ],
-                "center": [
-                    -77.03643321990967,
-                    38.89546690844457,
-                    16
-                ],
-                "description": "A painstakingly hand-drawn representation of the entire world. 2B graphite on acid-free paper.",
-                "filesize": 212410,
-                "id": "examples.a4c252ab",
-                "maxzoom": 21,
-                "minzoom": 0,
-                "name": "Pencil",
-                "private": true,
-                "scheme": "xyz",
-                "source": "mapbox:///mapbox.mapbox-streets-v4",
-                "tilejson": "2.0.0",
-                "tiles": [
-                    "https://a.tiles.mapbox.com/v4/examples.a4c252ab/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q",
-                    "https://b.tiles.mapbox.com/v4/examples.a4c252ab/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
-                ],
-                "webpage": "https://a.tiles.mapbox.com/v4/examples.a4c252ab/page.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
-            }).setView([54.0498942,-2.8055977], 18);
+            console.log('init called')
+            if ( $('#map').children().length == 0 ) {
+                // do something
+                console.log('here called')
+                map = L.mapbox.map('map', {
+                    "attribution": "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
+                    "autoscale": true,
+                    "bounds": [
+                        -180,
+                        -85.0511,
+                        180,
+                        85.0511
+                    ],
+                    "center": [
+                        -77.03643321990967,
+                        38.89546690844457,
+                        16
+                    ],
+                    "description": "A painstakingly hand-drawn representation of the entire world. 2B graphite on acid-free paper.",
+                    "filesize": 212410,
+                    "id": "examples.a4c252ab",
+                    "maxzoom": 21,
+                    "minzoom": 0,
+                    "name": "Pencil",
+                    "private": true,
+                    "scheme": "xyz",
+                    "source": "mapbox:///mapbox.mapbox-streets-v4",
+                    "tilejson": "2.0.0",
+                    "tiles": [
+                        "https://a.tiles.mapbox.com/v4/examples.a4c252ab/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q",
+                        "https://b.tiles.mapbox.com/v4/examples.a4c252ab/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
+                    ],
+                    "webpage": "https://a.tiles.mapbox.com/v4/examples.a4c252ab/page.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
+                }).setView([54.0498942, -2.8055977], 18);
 
-            // Stop the side bar from dragging when mousedown/tapdown on the map
-            L.DomEvent.addListener(document.getElementById('map'), 'mousedown', function(e) {
-                e.preventDefault();
-                return false;
-            });
+                // Stop the side bar from dragging when mousedown/tapdown on the map
+                L.DomEvent.addListener(document.getElementById('map'), 'mousedown', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
 
-            $scope.map = map;
+                $scope.map = map;
 
-            //$scope.centerOnMe();
-            HSSearch.init();
+                //$scope.centerOnMe();
+                HSSearch.init();
+            }
         }
+       
         L.DomEvent.addListener(window, 'load', initialize);
         $rootScope.$on('$locationChangeSuccess',initialize);
         $scope.centerOnMe = function() {
