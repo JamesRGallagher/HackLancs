@@ -18,7 +18,7 @@ cacheTheCastle.controller('MapCtrl', function($scope, $ionicLoading,$rootScope,$
 
         console.log('init called');
 
-       if ( $('#map').children().length == 0 ) {
+        if ( $('#map').children().length == 0 ) {
             // do something
             console.log('here called')
             map = L.mapbox.map('map', {

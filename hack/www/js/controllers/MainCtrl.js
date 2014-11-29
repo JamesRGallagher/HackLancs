@@ -4,6 +4,8 @@ cacheTheCastle.controller('MainCtrl', function($scope,$http) {
         $scope.places = data.Places;
     })
 
-
-    console.log(responsePromise);
-})
+  responsePromise.then( function(data) {
+  	console.log(data);
+  });
+  
+});
