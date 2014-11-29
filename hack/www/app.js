@@ -119,9 +119,13 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
 
             //$scope.centerOnMe();
             HSSearch.init();
+
+
         }
         L.DomEvent.addListener(window, 'load', initialize);
+
         $rootScope.$on('$locationChangeSuccess',initialize);
+        
         $scope.centerOnMe = function() {
             if(!$scope.map) {
                 return;
