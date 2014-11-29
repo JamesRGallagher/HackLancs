@@ -1,0 +1,143 @@
+<html ng-app="hs.mapbox">
+<head>
+    <meta charset="utf-8">
+    <title>Cache The Castle</title>
+
+    <!-- Sets initial viewport load and disables zooming  -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link href="http://code.ionicframework.com/0.9.24/css/ionic.min.css" rel="stylesheet">
+    <script src="http://code.ionicframework.com/0.9.24/js/ionic.bundle.min.js"></script>
+
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.js'></script>
+
+    <!-- google maps javascript -->
+    <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+        /*#map {
+  width: 100%;
+  height: 100%;
+}*/
+
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+
+        .scroll {
+            height: 100%;
+        }
+
+        #search-input {
+            text-align: center;
+        }
+
+        #search-bar {
+            background: none;
+            background-color: #222;
+            position: absolute;
+            width: 100%;
+            top: 44px;
+            height: 40px;
+            z-index: 3;
+        }
+        #search-bar .item {
+            background: none;
+            background-color: #222;
+            border: none;
+        }
+        #content {
+            top: 44px;
+            padding-top: 45px;
+            padding-bottom: 20px;
+            background-color: #222;
+        }
+        .scroll {
+            background-color: #222;
+        }
+    </style>
+
+</head>
+<body>
+
+<div ng-controller="MainCtrl">
+    <nav-view><ion-nav-back-button class="button-clear"
+                                   ng-click="goBack()">
+        <i class="ion-arrow-left-c"></i> Back
+    </ion-nav-back-button></nav-view>
+</div>
+
+<script id="event-menu.html" type="text/ng-template">
+    <side-menus>
+
+        <pane side-menu-content>
+            <nav-bar type="bar-assertive"
+                     back-button-type="button-icon"
+                     back-button-icon="ion-ios7-arrow-back"></nav-bar>
+            <nav-view name="menuContent"></nav-view>
+        </pane>
+
+        <side-menu side="left" class="side-menu">
+            <header class="bar bar-header bar-assertive">
+                <div class="title">Left Menu</div>
+            </header>
+            <div id="search-bar">
+                <div class="item item-input-inset">
+                    <label class="item-input-wrapper" id="search-input">
+                        <i class="icon ion-search placeholder-icon"></i>
+                        <input id="searchInput" type="text" placeholder="Search" ng-model="query" ng-change="search()">
+                    </label>
+                </div>
+            </div>
+            <content has-header="true">
+                <!--<ul class="list">
+                  <a href="#/event/check-in" class="item">Do Something</a>
+                </ul>-->
+            </content>
+        </side-menu>
+
+        <side-menu side="right">
+            <header class="bar bar-header bar-assertive">
+                <div class="title">Right Menu</div>
+            </header>
+            <content has-header="true">
+                <ul class="list">
+                    <a href="#/event/info" class="item">Do Something</a>
+                </ul>
+            </content>
+        </side-menu>
+
+    </side-menus>
+</script>
+
+<script id="home.html" type="text/ng-template">
+
+    <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
+        <content has-header="true" has-footer="false" scroll="false">
+            <div id="map">
+
+            </div>
+
+
+        </content>
+        <!--        <div class="bar bar-footer bar-dark">
+                  <a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
+                </div>-->
+    </view>
+</script>
+<script id="info.html" type="text/ng-template">
+
+    <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
+        <content has-header="true" has-footer="false" scroll="false">
+            INFO GOES HERE
+        </content>
+        <!--        <div class="bar bar-footer bar-dark"<a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
+                </div>-->
+    </view>
+</script>
+
+
+</body>
+</html>

@@ -14,21 +14,50 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             .state('eventmenu.home', {
                 url: "/home",
                 views: {
-                    'menuContent' :{
+                    'menuContent': {
                         templateUrl: "home.html",
                         controller: "MapCtrl"
                     }
                 }
             })
+            .state('eventmenu.info', {
+                url: "/info",
+                views: {
+                    'menuContent': {
+                        templateUrl: "info.html",
+                        controller: "InfoCtrl"
+                    }
+                }
+            })
+
+
+
+
 
         $urlRouterProvider.otherwise("/event/home");
     })
 
-    .controller('MainCtrl', function($scope) {
-        console.log('MainCtrl');
+    .controller('MainCtrl', function($scope,$http) {
+      var responsePromise = $http.get("https://hacklancaster.herokuapp.com/events");
+
+        console.log(responsePromise);
     })
 
-
+    .controller('InfoCtrl', function($scope) {
+        console.log('INFO');
+        $scope.leftButtons = [{
+            type: 'button-icon icon ion-search',
+            tap: function(e) {
+                $scope.sideMenuController.toggleLeft();
+            }
+        }];
+        $scope.rightButtons = [{
+            type: 'button-icon icon ion-navicon',
+            tap: function(e) {
+                $scope.sideMenuController.toggleRight();
+            }
+        }];
+    })
     .controller('MapCtrl', function($scope, $ionicLoading) {
 
         $scope.leftButtons = [{
