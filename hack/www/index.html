@@ -76,7 +76,10 @@
             <nav-bar type="bar-assertive"
                      back-button-type="button-icon"
                      back-button-icon="ion-ios7-arrow-back"></nav-bar>
-            <nav-view name="menuContent"></nav-view>
+            <nav-view name="menuContent">
+
+
+            </nav-view>
         </pane>
 
         <side-menu side="left" class="side-menu">
@@ -103,8 +106,8 @@
                 <div class="title">Right Menu</div>
             </header>
             <content has-header="true">
-                <ul class="list">
-                    <a href="#/event/info" class="item">Do Something</a>
+                <ul class="list" ng-repeat="place in Places">
+                    <a href="#/event/info" class="item">place.Event_Start_Date</a>
                 </ul>
             </content>
         </side-menu>

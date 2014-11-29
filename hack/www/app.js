@@ -38,7 +38,11 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
     })
 
     .controller('MainCtrl', function($scope,$http) {
-      var responsePromise = $http.get("https://hacklancaster.herokuapp.com/events");
+      var responsePromise = $http.get("https://hacklancaster.herokuapp.com/events")
+          .success(function(data, status, headers, config) {
+            $scope.places = data.Places;
+        })
+
 
         console.log(responsePromise);
     })
@@ -58,7 +62,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             }
         }];
     })
-    .controller('MapCtrl', function($scope, $ionicLoading) {
+    .controller('MapCtrl', function($scope, $ionicLoading,$rootScope,$location) {
 
         $scope.leftButtons = [{
             type: 'button-icon icon ion-search',
@@ -117,7 +121,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             HSSearch.init();
         }
         L.DomEvent.addListener(window, 'load', initialize);
-
+        $rootScope.$on('$locationChangeSuccess',initialize);
         $scope.centerOnMe = function() {
             if(!$scope.map) {
                 return;
