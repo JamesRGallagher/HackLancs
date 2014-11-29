@@ -29,22 +29,27 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                     }
                 }
             })
+            .state('eventmenu.start', {
+                url: "/start",
+                views: {
+                    'menuContent': {
+                        templateUrl: "start.html",
+                        controller: "StartCtrl"
+                    }
+                }
+            })
 
-
-
-
-
-        $urlRouterProvider.otherwise("/event/home");
+        $urlRouterProvider.otherwise("/event/start");
     })
 
     .controller('MainCtrl', function($scope,$http) {
       var responsePromise = $http.get("https://hacklancaster.herokuapp.com/events")
           .success(function(data, status, headers, config) {
             $scope.events = data.events;
+
+            console.log(data.events);
         })
 
-
-        console.log(responsePromise);
     })
 
     .controller('InfoCtrl', function($scope) {
@@ -62,6 +67,33 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             }
         }];
     })
+
+    .controller('StartCtrl', function($scope, $http) {
+        console.log('INFO');
+        
+        $scope.leftButtons = [{
+            type: 'button-icon icon ion-search',
+            tap: function(e) {
+                $scope.sideMenuController.toggleLeft();
+            }
+        }];
+        
+        $scope.rightButtons = [{
+            type: 'button-icon icon ion-navicon',
+            tap: function(e) {
+                $scope.sideMenuController.toggleRight();
+            }
+        }];
+
+        var responsePromise = $http.get("https://hacklancaster.herokuapp.com/catogories")
+          .success(function(data, status, headers, config) {
+            $scope.periods = data.catogories;
+
+            console.log(data);
+        })
+
+    })
+
     .controller('MapCtrl', function($scope, $ionicLoading,$rootScope,$location) {
 
         $scope.leftButtons = [{

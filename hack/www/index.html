@@ -131,19 +131,31 @@
 
 
         </content>
-        <!--        <div class="bar bar-footer bar-dark">
-                  <a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
-                </div>-->
     </view>
 </script>
+
+
+<script id="start.html" type="text/ng-template">
+
+    <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
+        <content has-header="true" has-footer="false" scroll="true">
+            
+            <div class="card" ng-repeat="period in periods">
+              <div class="item item-text-wrap">
+                {{period.Legend}}
+              </div>
+            </div>
+
+        </content>
+    </view>
+</script>
+
 <script id="info.html" type="text/ng-template">
 
     <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
         <content has-header="true" has-footer="false" scroll="false">
             INFO GOES HERE
         </content>
-        <!--        <div class="bar bar-footer bar-dark"<a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
-                </div>-->
     </view>
 </script>
 
