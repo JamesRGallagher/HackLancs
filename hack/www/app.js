@@ -76,7 +76,6 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
         }];
 
         function initialize() {
-<<<<<<< HEAD
             console.log('init called')
             if ( $('#map').children().length == 0 ) {
                 // do something
@@ -123,7 +122,6 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                 //$scope.centerOnMe();
                 HSSearch.init();
             }
-=======
             var map = L.mapbox.map('map', {
                 "attribution": "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
                 "autoscale": true,
@@ -167,7 +165,6 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             HSSearch.init();
 
 
->>>>>>> FETCH_HEAD
         }
        
         L.DomEvent.addListener(window, 'load', initialize);
