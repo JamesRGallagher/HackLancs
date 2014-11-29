@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3508cc15-5de1-48d1-af5e-95a613660ca5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hack/www/js/controllers/InfoCtrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hack/www/js/controllers/MainCtrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hack/www/js/controllers/MapCtrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hack/www/js/app.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hack/www/js/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hack/www/app.js" afterPath="$PROJECT_DIR$/hack/www/app.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/hack/www/js/config.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/hack/www/js/controllers/InfoCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/hack/www/js/controllers/MainCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/hack/www/js/controllers/MapCtrl.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hack/www/js/app.js" afterPath="$PROJECT_DIR$/hack/www/js/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hack/www/index.html" afterPath="$PROJECT_DIR$/hack/www/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="HackLancs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,24 +32,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hack/www/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.02" vertical-offset="1534" max-vertical-offset="2400">
-              <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
-              <folding>
-                <marker date="1417287509000" expanded="true" signature="1588:1925" placeholder="{...}" />
-                <marker date="1417287509000" expanded="true" signature="1952:2042" placeholder="{...}" />
-              </folding>
+            <state vertical-scroll-proportion="0.6806283" vertical-offset="1485" max-vertical-offset="2355">
+              <caret line="125" column="35" selection-start-line="125" selection-start-column="35" selection-end-line="125" selection-end-column="35" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/hack/www/app.js">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hack/www/js/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.025125628" vertical-offset="720" max-vertical-offset="4155">
-              <caret line="49" column="3" selection-start-line="49" selection-start-column="3" selection-end-line="49" selection-end-column="3" />
+            <state vertical-scroll-proportion="-4.769231" vertical-offset="506" max-vertical-offset="3630">
+              <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -261,25 +258,24 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/hack/www/index.html">
+    <entry file="file://$PROJECT_DIR$/hack/www/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.02" vertical-offset="1534" max-vertical-offset="2400">
-          <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
-          <folding>
-            <marker date="1417287509000" expanded="true" signature="1588:1925" placeholder="{...}" />
-            <marker date="1417287509000" expanded="true" signature="1952:2042" placeholder="{...}" />
-          </folding>
+        <state vertical-scroll-proportion="-4.769231" vertical-offset="506" max-vertical-offset="3630">
+          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hack/www/app.js">
+    <entry file="file://$PROJECT_DIR$/hack/www/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.025125628" vertical-offset="720" max-vertical-offset="4155">
-          <caret line="49" column="3" selection-start-line="49" selection-start-column="3" selection-end-line="49" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.6806283" vertical-offset="1485" max-vertical-offset="2355">
+          <caret line="125" column="35" selection-start-line="125" selection-start-column="35" selection-end-line="125" selection-end-column="35" />
           <folding />
         </state>
       </provider>
