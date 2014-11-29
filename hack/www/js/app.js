@@ -88,6 +88,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
           .success(function(data, status, headers, config) {
             $scope.periods = data.catogories;
 
+            
             console.log(data);
         })
 
