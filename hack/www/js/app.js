@@ -159,7 +159,6 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             HSSearch.init();
         }
         
-        
         $scope.centerOnMe = function() {
             if(!$scope.map) {
                 return;
