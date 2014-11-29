@@ -190,6 +190,8 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             }
             
         }
+
+        initialize();
     });
 
 var HSSearch = {
