@@ -138,11 +138,13 @@
 
     <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
         <content has-header="true" has-footer="false" scroll="true">
-            
-            <div class="card" ng-repeat="period in periods | orderBy: 'SortOrder'" style="{cursor: 'pointer'}" ng-click="chooseCat(period.Period)">
-              <div class="item item-text-wrap">
+            <div class="list">
+
+              <a class="item item-icon-left" ng-repeat="period in periods | orderBy: 'SortOrder'" style="{cursor: 'pointer'}" ng-click="chooseCat(period.Period)">
+                <i class="icon ion-email"></i>
                 {{period.Legend}}
-              </div>
+              </a>
+
             </div>
 
         </content>

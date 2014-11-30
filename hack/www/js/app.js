@@ -157,7 +157,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
 
                     // here you call `bindPopup` with a string of HTML you create - the feature
                     // properties declared above are available under `layer.feature.properties`
-                    if (layer.feature.id){
+                    if (layer.feature.id && !angular.isUndefined(layer.features)) {
                         var content = '<h2>'+layer.features.properties.title+'<\/h2>'+'<br><div style="font-size:10px">'+feature.properties.description+'</div>'
                     layer.bindPopup(content);
                 }
