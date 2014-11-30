@@ -3,6 +3,10 @@
     <meta charset="utf-8">
     <title>Cache The Castle</title>
 
+    <link rel="icon" 
+      type="image/png" 
+      href="http://example.com/myicon.png">
+
     <!-- Sets initial viewport load and disables zooming  -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -126,6 +130,19 @@
     <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
         <content has-header="true" has-footer="false" scroll="false">
             <div id="map" ng-init="initializeMap()">
+
+            </div>
+
+
+        </content>
+    </view>
+</script>
+
+<script id="present.html" type="text/ng-template">
+
+    <view title="'Map'" left-buttons="leftButtons" right-buttons="rightButtons">
+        <content has-header="true" has-footer="false" scroll="false">
+            <div id="mapPresent" ng-init="initializeMapPresent()">
 
             </div>
 

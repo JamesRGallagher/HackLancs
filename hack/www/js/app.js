@@ -38,6 +38,15 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                     }
                 }
             })
+            .state('eventmenu.present', {
+                url: "/present",
+                views: {
+                    'menuContent': {
+                        templateUrl: "present.html",
+                        controller: "PresentCtrl"
+                    }
+                }
+            })
 
         $urlRouterProvider.otherwise("/event/start");
     })
@@ -150,8 +159,17 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                 
                 console.log(geo);
 
-                var featureLayer = L.mapbox.featureLayer(geo)
+                var featureLayer = L.mapbox.featureLayer()
                     .addTo(map);
+
+                featureLayer.on('layeradd', function(e) {
+                    var marker = e.layer,
+                        feature = marker.feature;
+
+                    marker.setIcon(L.icon(feature.properties.icon));
+                });
+
+                featureLayer.setGeoJSON(geo);
 
                 featureLayer.eachLayer(function(layer) {
 
@@ -196,15 +214,100 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             });
         };
 
+    })
+
+    .controller('PresentCtrl', function($scope, $ionicLoading,$rootScope,$location,$http) {
+
+        $scope.leftButtons = [{
+            type: 'button-icon icon ion-search',
+            tap: function(e) {
+                $scope.sideMenuController.toggleLeft();
+            }
+        }];
+        $scope.rightButtons = [{
+            type: 'button-icon icon ion-navicon',
+            tap: function(e) {
+                $scope.sideMenuController.toggleRight();
+            }
+        }];
+
+        $scope.initializeMapPresent =  function() {
+
+            $http.get('https://hacklancaster.herokuapp.com/catogories/' + $location.search().period).success(function(geo) {
+                var mapPresent = L.mapbox.map('mapPresent', mapStyle).setView([54.0498942, -2.8055977], 15)
+                
+                console.log(geo);
+
+                var featureLayer = L.mapbox.featureLayer()
+                    .addTo(mapPresent);
+
+                featureLayer.on('layeradd', function(e) {
+                    var marker = e.layer,
+                        feature = marker.feature;
+
+                    marker.setIcon(L.icon(feature.properties.icon));
+                });
+
+                featureLayer.setGeoJSON(geo);
+
+                featureLayer.eachLayer(function(layer) {
+
+                    // here you call `bindPopup` with a string of HTML you create - the feature
+                    // properties declared above are available under `layer.feature.properties`
+                    if (layer.feature.id && !angular.isUndefined(layer.features)) {
+                        var content = '<h2>'+layer.features.properties.title+'<\/h2>'+'<br><div style="font-size:10px">'+feature.properties.description+'</div>'
+                    layer.bindPopup(content);
+                }
+                });
+
+
+            });
+            // Stop the side bar from dragging when mousedown/tapdown on the map
+            L.DomEvent.addListener(document.getElementById('mapPresent'), 'mousedown', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            $scope.mapPresent = mapPresent;
+
+
+            //$scope.centerOnMe();
+            HSSearch.init();
+        }
+        
+        $scope.centerOnMe = function() {
+            if(!$scope.mapPresent) {
+                return;
+            }
+
+            $scope.loading = $ionicLoading.show({
+                content: 'Getting current location...',
+                showBackdrop: false
+            });
+
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                $scope.mapPresent.setView([pos.coords.latitude, pos.coords.longitude], 9);
+                $scope.loading.hide();
+            }, function(error) {
+                alert('Unable to get location: ' + error.message);
+            });
+        };
+
         var controller = new Leap.Controller();
+
         controller.connect();
 
         controller.on('frame', onFrame);
 
         function onFrame(frame)
         {
-            for ( var i = 0; i < frame.pointables.length; i++) {
 
+            //look at change in hand positio
+
+            if(frame.hands.length > 0) {
+                var hand = frame.hands[0];
+                var position = hand.palmPosition;
+                console.log(position);
             }
             
         }
@@ -286,4 +389,35 @@ var HSSearch = {
 
         console.log(params);
     }
+};
+
+var mapStyle = {
+    "attribution": "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
+    "autoscale": true,
+    "bounds": [
+        -180,
+        -85.0511,
+        180,
+        85.0511
+    ],
+    "center": [
+        -77.03643321990967,
+        38.89546690844457,
+        16
+    ],
+    "description": "A painstakingly hand-drawn representation of the entire world. 2B graphite on acid-free paper.",
+    "filesize": 212410,
+    "id": "examples.a4c252ab",
+    "maxzoom": 21,
+    "minzoom": 0,
+    "name": "Pencil",
+    "private": true,
+    "scheme": "xyz",
+    "source": "mapbox:///mapbox.mapbox-streets-v4",
+    "tilejson": "2.0.0",
+    "tiles": [
+        "https://a.tiles.mapbox.com/v4/examples.a4c252ab/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q",
+        "https://b.tiles.mapbox.com/v4/examples.a4c252ab/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
+    ],
+    "webpage": "https://a.tiles.mapbox.com/v4/examples.a4c252ab/page.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"
 };
