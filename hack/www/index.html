@@ -18,6 +18,12 @@
     <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' />
     <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.js'></script>
 
+	
+	<link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+	<script src='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.min.js'></script>
+
+    <script src="http://js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
+
     <!-- google maps javascript -->
     <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>-->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
@@ -115,8 +121,8 @@
             </header>
             <content has-header="true">
                 <ul class="list">
-                    <li  ng-repeat="event in events">
-                        <a href="#/event/info" data-click-menulink class="item item-icon-left"><i class="icon ion-ios7-ionic-outline"></i>{{ event.Site_Name}}</a>
+                    <li ng-repeat="event in whereubin">
+                        <a href="#/event/info" data-click-menulink class="item item-icon-left"><i class="icon ion-ios7-ionic-outline"></i>{{event}}Hello!</a>
                     </li>
                 </ul>
             </content>

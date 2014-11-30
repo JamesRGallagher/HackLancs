@@ -57,7 +57,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
             $scope.events = data.events;
 
             console.log(data.events);
-        })
+        });
 
     })
 
@@ -108,7 +108,37 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
 
     })
 
-    .controller('MapCtrl', function($scope, $ionicLoading,$rootScope,$location,$http) {
+    .controller('MapCtrl', function($scope, $ionicLoading,$rootScope,$location,$http, $interval) {
+
+        var mapObject;
+        var featureLayer;
+
+		$scope.whereubin = [];
+
+        if ( $location.search().present) {
+
+            var pusher = new Pusher('3bf0e385c57546f6d7e8');
+
+            var channel = pusher.subscribe('screen_count'); 
+
+            channel.bind('person_near', function(data) {
+
+                $http.get('https://hacklancaster.herokuapp.com/catogories/' + $location.search().period).success(function(geo) {
+                    featureLayer.setGeoJSON(geo);
+
+                    featureLayer.eachLayer(function(layer) {
+
+                        // here you call `bindPopup` with a string of HTML you create - the feature
+                        // properties declared above are available under `layer.feature.properties`
+                        if (layer.feature.id == data.monument) {
+                            var content = '<h2>'+layer.features.properties.title+'<\/h2>'+'<br><div style="font-size:10px">'+feature.properties.description+'</div>'
+                            layer.bindPopup(content);
+                        }
+                    });
+                });
+
+            });
+        }
 
         $scope.leftButtons = [{
             type: 'button-icon icon ion-search',
@@ -124,20 +154,25 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
         }];
 
         $scope.initializeMap =  function() {
-
+            
             $http.get('https://hacklancaster.herokuapp.com/catogories/' + $location.search().period).success(function(geo) {
-                var map = L.mapbox.map('map', mapStyle).setView([54.0498942, -2.8055977], 15)
+                mapObject = L.mapbox.map('map', mapStyle).setView([54.0498942, -2.8055977], 15)
+				$scope.geo = geo;
                 
                 console.log(geo);
 
-                var featureLayer = L.mapbox.featureLayer()
-                    .addTo(map);
+                featureLayer = L.mapbox.featureLayer()
+                    .addTo(mapObject);
 
                 featureLayer.on('layeradd', function(e) {
-                    var marker = e.layer,
-                        feature = marker.feature;
+                    var marker = e.layer;
+                    var feature = marker.feature;
 
-                    if (!angular.isUndefined(marker)) {
+                    console.log(marker);
+
+
+
+                    if ( marker.feature.id != "line") {
 
                         marker.setIcon(L.icon(feature.properties.icon));
                     
@@ -154,6 +189,59 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                         var content = '<h2>'+layer.features.properties.title+'<\/h2>'+'<br><div style="font-size:10px">'+feature.properties.description+'</div>'
                     layer.bindPopup(content);
                 }
+
+                var controller = new Leap.Controller();
+
+                controller.connect();
+
+                var singleHandEnter = function() {
+                        // $scope.hands.mapAnchor = mapObject.getCenter();
+                        // $scope.hands.handAnchor = $scope.hands.new[0].stabilizedPalmPosition;
+                    }
+
+                var singleHandMove = function () {
+                    var change = [];
+
+                    for (var i = 0; i < 3; i++) {
+                        change[i] = $scope.hands.new[0].stabilizedPalmPosition[i] - $scope.hands.old[0].stabilizedPalmPosition[i];
+                    }
+
+                   // mapObject.panBy([changeX, changeY], false);
+                    mapObject.panBy([-change[0], change[1]], {
+                        'animate': false,
+                        'duration': 0, 
+                        'easyLinearity': 0, 
+                        'noMoveStart': false 
+
+                    });
+
+                }
+
+                var twoHandMove = function() {
+                    var z = $scope.hands.new[0].stabilizedPalmPosition[2];
+                    console.log(z);
+
+                    mapObject.setZoom(Math.round(((-z+130)/60)+13, 0), {
+                        'animate':false
+                    })
+                }
+
+                controller.on('frame', function (frame) {
+                    
+                    $scope.hands.old = $scope.hands.new;
+                    $scope.hands.new = frame.hands;
+
+                    if ( $scope.hands.old.length == 0 && $scope.hands.new.length == 1) {
+                        singleHandEnter();
+                    }
+                    if ( $scope.hands.old.length == 1 && $scope.hands.new.length == 1) {
+                        singleHandMove();
+                    }
+                    if ( $scope.hands.old.length == 2 && $scope.hands.new.length == 2) {
+                        twoHandMove();
+                    }   
+                    
+                });
             });
 
 
@@ -164,40 +252,59 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                 return false;
             });
 
-            $scope.map = map;
-
-            var controller = new Leap.Controller();
-
-            controller.connect();
-
-            controller.on('frame', onFrame);
-
-            $scope.hand = {'new': [0, 0]};
-
-            function onFrame(frame)
-            {
-
-                //look at change in hand position
-
-                if(frame.hands.length == 1) {
-                    $scope.hand.old = $scope.hand.new;
-
-                    $scope.hand.new = frame.hands[0];
-
-                    console.log(map);
-
-                    $scope.map.setView([
-                        map.getCenter()[0] - ($scope.hand.new.palmPosition[0] - $scope.hand.old.palmPosition[0]), 
-                        map.getCenter()[1] - ($scope.hand.new.palmPosition[1] - $scope.hand.old.palmPosition[1])], 
-                    9);
-                    
-                }
-                
-            }
+            $scope.hands = {new: []};
+			
+			setInterval(function(){
+                // method to be executed;
+                $scope.nearMe()
+            },1500);
 
             //$scope.centerOnMe();
             HSSearch.init();
         }
+
+		$scope.nearMe = function() {
+
+            navigator.geolocation.getCurrentPosition(function(pos) {
+               // $scope.map.setView([pos.coords.latitude, pos.coords.longitude], 9);
+                //alert(pos.coords.latitude);
+                //alert(pos.coords.longitude);
+
+                for(i=0;i<$scope.events.length;i++){
+                   
+                   //if()
+
+                    var placeLat = parseFloat($scope.geo.features[i].geometry.coordinates[1].toFixed(5)) // lat
+                    var placeLong = parseFloat($scope.geo.features[i].geometry.coordinates[0].toFixed(5)) // long
+                    
+                    var myLat = parseFloat(pos.coords.latitude.toFixed(5))
+                    var myLong = parseFloat(pos.coords.longitude.toFixed(5))
+                    console.log('my long-'+pos.coords.latitude)
+                    console.log('my lat-'+pos.coords.longitude)
+                    console.log('place long-'+placeLat)
+                    console.log('place lat-'+placeLong)
+
+                    //console.log(placeLong + "-" + myLong)
+                    console.log(Math.abs(placeLong-myLong).toFixed(3))
+                    if(Math.abs(placeLong-myLong)<=0.0001 && Math.abs(placeLat-myLat)<=0.0001 ){
+
+                        console.log("Alert!");
+
+                            sweetAlert("Good Job!", "Found "+ $scope.geo.features[i].properties.title +"!", "success");
+                            $scope.whereubin.push($scope.geo.features[i].properties.title);
+                            $scope.whereubin = [{'text': "Hello"}];
+                            console.log($scope.whereubin);
+                            $http.get('https://hacklancaster.herokuapp.com/nearby/'+$scope.geo.features[i].id)
+                    }
+
+                    
+
+                }
+                
+            }, function(error) {
+                alert('Unable to get location: ' + error.message);
+            });
+        };
 		
         
         $scope.centerOnMe = function() {
@@ -320,6 +427,11 @@ var mapStyle = {
     "minzoom": 0,
     "name": "Pencil",
     "private": true,
+
+    "zoomAnimation": false, 
+    "fadeAnimation": false, 
+    "intertia": false, 
+
     "scheme": "xyz",
     "source": "mapbox:///mapbox.mapbox-streets-v4",
     "tilejson": "2.0.0",
