@@ -168,10 +168,6 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                     var marker = e.layer;
                     var feature = marker.feature;
 
-                    console.log(marker);
-
-
-
                     if ( marker.feature.id != "line") {
 
                         marker.setIcon(L.icon(feature.properties.icon));
@@ -206,24 +202,29 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                         change[i] = $scope.hands.new[0].stabilizedPalmPosition[i] - $scope.hands.old[0].stabilizedPalmPosition[i];
                     }
 
-                   // mapObject.panBy([changeX, changeY], false);
+                    // mapObject.panBy([changeX, changeY], false);
                     mapObject.panBy([-change[0], change[1]], {
                         'animate': false,
                         'duration': 0, 
                         'easyLinearity': 0, 
                         'noMoveStart': false 
-
                     });
 
                 }
 
-                var twoHandMove = function() {
-                    var z = $scope.hands.new[0].stabilizedPalmPosition[2];
-                    console.log(z);
+                var singleHandSwipe = function() {
 
-                    mapObject.setZoom(Math.round(((-z+130)/60)+13, 0), {
+                }
+
+                var twoHandMove = function() {
+                    x = $scope.hands.new[0].stabilizedPalmPosition[0] - $scope.hands.new[1].stabilizedPalmPosition[0];
+                    y = $scope.hands.new[0].stabilizedPalmPosition[1] - $scope.hands.new[1].stabilizedPalmPosition[1];
+                    z = $scope.hands.new[0].stabilizedPalmPosition[2] - $scope.hands.new[1].stabilizedPalmPosition[2];
+                    var dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+
+                    mapObject.setZoom(Math.round(((dist-70)/100) + 14, 0), {
                         'animate':false
-                    })
+                    });
                 }
 
                 controller.on('frame', function (frame) {
@@ -235,15 +236,18 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                         singleHandEnter();
                     }
                     if ( $scope.hands.old.length == 1 && $scope.hands.new.length == 1) {
-                        singleHandMove();
+                        if ($scope.hands.old[0].grabStrength > 0.8) {
+                            singleHandMove();
+                        }
                     }
                     if ( $scope.hands.old.length == 2 && $scope.hands.new.length == 2) {
-                        twoHandMove();
+                        if ($scope.hands.old[0].grabStrength > 0.8 || $scope.hands.old[1].grabStrength > 0.8) {
+                            twoHandMove();
+                        }
                     }   
                     
                 });
             });
-
 
             });
             // Stop the side bar from dragging when mousedown/tapdown on the map
@@ -272,20 +276,18 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
 
                 for(i=0;i<$scope.events.length;i++){
                    
-                   //if()
-
                     var placeLat = parseFloat($scope.geo.features[i].geometry.coordinates[1].toFixed(5)) // lat
                     var placeLong = parseFloat($scope.geo.features[i].geometry.coordinates[0].toFixed(5)) // long
                     
                     var myLat = parseFloat(pos.coords.latitude.toFixed(5))
                     var myLong = parseFloat(pos.coords.longitude.toFixed(5))
-                    console.log('my long-'+pos.coords.latitude)
-                    console.log('my lat-'+pos.coords.longitude)
-                    console.log('place long-'+placeLat)
-                    console.log('place lat-'+placeLong)
+                    // console.log('my long-'+pos.coords.latitude)
+                    // console.log('my lat-'+pos.coords.longitude)
+                    // console.log('place long-'+placeLat)
+                    // console.log('place lat-'+placeLong)
 
                     //console.log(placeLong + "-" + myLong)
-                    console.log(Math.abs(placeLong-myLong).toFixed(3))
+                    //console.log(Math.abs(placeLong-myLong).toFixed(3))
                     if(Math.abs(placeLong-myLong)<=0.0001 && Math.abs(placeLat-myLat)<=0.0001 ){
 
                         console.log("Alert!");
@@ -293,7 +295,7 @@ angular.module('hs.mapbox', ['ionic','ionic.service.platform', 'ionic.ui.content
                             sweetAlert("Good Job!", "Found "+ $scope.geo.features[i].properties.title +"!", "success");
                             $scope.whereubin.push($scope.geo.features[i].properties.title);
                             $scope.whereubin = [{'text': "Hello"}];
-                            console.log($scope.whereubin);
+                            //console.log($scope.whereubin);
                             $http.get('https://hacklancaster.herokuapp.com/nearby/'+$scope.geo.features[i].id)
                     }
 
